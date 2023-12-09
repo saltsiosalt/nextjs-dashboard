@@ -4,8 +4,8 @@ import { lusitana } from '@/app/ui/fonts';
 // import { Revenue } from '@/app/lib/definitions';
 import { fetchRevenue } from '@/app/lib/data';
 
-// This component is representational only.
-// For data visualization UI, check out:
+// このコンポーネントは代表的なものにすぎません。
+// データ視覚化UIについては、以下をチェックしてください。
 // https://www.tremor.so/
 // https://www.chartjs.org/
 // https://airbnb.io/visx/
