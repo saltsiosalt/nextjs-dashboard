@@ -1,3 +1,48 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "prettier"],
+  // パーサー（ソースコードを特定の言語仕様に沿って解析してくれるライブラリ）の各種実行オプションを設定
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "tsconfigRootDir": ".",
+    "project": ["./tsconfig.json"],
+    "sourceType": "module"
+  },
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "object",
+          "index",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "{react,next/**}",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "{[A-Z]*,**/[A-Z]*}",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "./*.{css,scss,sass,less}",
+            "group": "index",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ]
+  }
 }
