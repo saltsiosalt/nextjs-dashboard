@@ -4,11 +4,6 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function CardWrapper() {
-  const primary = {
-    light: '#fff',
-    red: '#ffad66',
-  };
-
   type CardItem = {
     name: string;
     title: string;
@@ -156,19 +151,14 @@ export default function CardWrapper() {
   useEffect(() => {
     setShuffledItems(shuffleArray(cardItem));
   }, []);
-  // const shuffledItems = shuffleArray(cardItem);
 
   // クリックされたカードを識別するための状態管理を設定
-  // const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(
-  //   null,
-  // );
   type SelectedCard = {
     index: number;
     name: string;
   };
   // 選択されたカードの index と name を保持する
   const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([]);
-  // const [selectedCards, setSelectedCards] = useState<number[]>([]);
 
   // カードがクリックされたときに実行される関数
   // クリックされたカードの index と name を selectedCards 配列に追加または削除します。
@@ -190,47 +180,93 @@ export default function CardWrapper() {
     setSelectedCards([]);
   };
 
+  // 「送信」ボタンを追加し、そのボタンがクリックされたときの処理
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const handleSubmit = () => {
+    setIsSubmitted(true);
+  };
+
+  const handleReturn = () => {
+    setIsSubmitted(false);
+  };
+
   return (
     <>
-      {shuffledItems.map((item, index) => (
-        // <button key={index} className="rounded-xl bg-gray-50 p-2 shadow-sm" >
-        <button
-          className={`rounded-xl p-2 shadow-sm ${
-            selectedCards.some((card) => card.index === index)
-              ? 'bg-red-500'
-              : 'bg-gray-50'
-          }`}
-          key={index}
-          onClick={() => handleCardClick(index, item.name)}
-        >
-          <div
-            className={`${notoSansJp.className} truncate rounded-xl bg-white px-3 py-6 text-center text-2xl`}
-          >
-            <h3
-              className={`${notoSansJp.className} text-sm font-medium break-words`}
-            >
-              {item.title}
-            </h3>
-            <Image
-              src={`/image/${item.image}`}
-              width={200}
-              height={200}
-              sizes="80vw"
-              style={{
-                width: '100%',
-                height: 'auto',
-              }}
-              alt="fruit apple"
-            />
+      {/* カードを選択する画面 */}
+      {!isSubmitted && (
+        <>
+          <h2>好きなカードをクリックして、「送信」ボタンを押してね！</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {shuffledItems.map((item, index) => (
+              <button
+                className={`rounded-xl p-2 shadow-sm ${
+                  selectedCards.some((card) => card.index === index)
+                    ? 'bg-red-500'
+                    : 'bg-gray-50'
+                }`}
+                key={index}
+                onClick={() => handleCardClick(index, item.name)}
+              >
+                <div
+                  className={`${notoSansJp.className} truncate rounded-xl bg-white px-3 py-6 text-center text-2xl`}
+                >
+                  <h3
+                    className={`${notoSansJp.className} text-sm font-medium break-words`}
+                  >
+                    {item.title}
+                  </h3>
+                  <Image
+                    src={`/image/${item.image}`}
+                    width={200}
+                    height={200}
+                    sizes="80vw"
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                    }}
+                    alt="fruit apple"
+                  />
+                </div>
+              </button>
+            ))}
           </div>
-        </button>
-      ))}
-      <button
-        onClick={resetCards}
-        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white"
-      >
-        リセット
-      </button>
+          {/* フッター要素 */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white p-4">
+            <div className="flex justify-evenly">
+              <button
+                onClick={resetCards}
+                className="rounded bg-blue-500 px-4 py-2 text-white"
+              >
+                カードをえらびなおす
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="rounded bg-blue-500 px-4 py-2 text-white"
+              >
+                そうしんする
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* 送信ボタンクリック後の画面 */}
+      {isSubmitted && (
+        <div>
+          <h2>選択されたカード:</h2>
+          <ul>
+            {selectedCards.map((card) => (
+              <li key={card.index}>{card.name}</li>
+            ))}
+          </ul>
+          <button
+            onClick={handleReturn}
+            className="mt-4 rounded bg-blue-500 px-4 py-2 text-white"
+          >
+            戻ってカードをえらびなおす
+          </button>
+        </div>
+      )}
     </>
   );
 }
