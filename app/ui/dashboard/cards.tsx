@@ -3,6 +3,8 @@ import { notoSansJp } from '@/app/ui/fonts';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useChat } from 'ai/react';
+import { showAlertModal } from '@/app/ui/dashboard/AlertModalManager';
+import { AlertModalManager } from '@/app/ui/dashboard/AlertModalManager';
 
 export default function CardWrapper() {
   // setMessages: 「メッセージ」の状態をローカルで更新します。
@@ -26,8 +28,8 @@ export default function CardWrapper() {
   });
 
   type CardItem = {
-    name: string;
-    title: string;
+    name: string; // AIに指示するよう
+    title: string; // 画面表示用
     image: string;
   };
 
@@ -128,17 +130,17 @@ export default function CardWrapper() {
     },
     { name: '犬', title: '犬', image: 'dog_akitainu.png' },
     { name: '猫', title: '猫', image: 'cat11_moyou_sabatora_moyou_white.png' },
-    { name: 'さんすう', title: 'さんすう', image: 'textbook_h_sansu.png' },
-    { name: 'こくご', title: 'こくご', image: 'textbook_h_kokugo.png' },
-    { name: 'りか', title: 'りか', image: 'textbook_h_rika.png' },
-    { name: 'しゃかい', title: 'しゃかい', image: 'textbook_h_syakai.png' },
+    { name: '算数', title: 'さんすう', image: 'textbook_h_sansu.png' },
+    { name: '国語', title: 'こくご', image: 'textbook_h_kokugo.png' },
+    { name: '理科', title: 'りか', image: 'textbook_h_rika.png' },
+    { name: '社会', title: 'しゃかい', image: 'textbook_h_syakai.png' },
     { name: '海', title: '海', image: 'umi_beach.png' },
     { name: 'うきわ', title: 'うきわ', image: 'ukiwa.png' },
     { name: 'プール', title: 'プール', image: 'suiei_seoyogi.png' },
     { name: '木', title: '木', image: 'tree_yellowgreen.png' },
     {
-      name: '料理する人',
-      title: '料理する人',
+      name: '料理',
+      title: '料理',
       image: 'cooking_chef_man_asia.png',
     },
     {
@@ -184,7 +186,7 @@ export default function CardWrapper() {
   // カードがクリックされたときに実行される関数
   // クリックされたカードの index と name を selectedCards 配列に追加または削除します。
   const handleCardClick = (index: number, name: string) => {
-    console.log('handleCardClick　クリック');
+    console.log('handleCardClickクリック');
     setSelectedCards((prevSelectedCards) => {
       const isAlreadySelected = prevSelectedCards.some(
         (card) => card.index === index,
@@ -200,53 +202,73 @@ export default function CardWrapper() {
 
   // 全てのカードの選択をクリアする
   const resetCards = () => {
+    console.log('resetCardsクリック');
     setSelectedCards([]);
   };
 
   // 「送信」ボタンを追加し、そのボタンがクリックされたときの処理
   const [isSubmitted, setIsSubmitted] = useState(false);
   const formSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // const test = await fetch('api/story', { method: 'POST' });
-    // selectedCardsからnameプロパティを取り出し、カンマ区切りで結合する
-    // const cardStr = selectedCards.map((card) => card.name).join(',');
-    // const cardStr = selectedCards.map((card) => `「${card.name}」`).join('、');
-    const cardStr = selectedCards
-      .map(
-        (card, index) =>
-          `「${card.name}」` + (index < selectedCards.length - 1 ? '、' : ''),
-      )
-      .join('');
-    const message = `# 前提: あなたは１０歳向けの物語を作成する小説家のプロとして振る舞ってください。# 質問: ${cardStr} を使って簡単な小説を書いてください。`;
-    // setInput(cardStr);
+    console.log('selectedCards.length-1:', selectedCards.length);
+    const showAlert = () => {
+      console.log('showAlert');
+      showAlertModal({
+        title: 'カードの選択がまちがってます！',
+        message: 'カードは３つえらんでね',
+      });
+    };
+    if (selectedCards.length !== 3) {
+      console.log('selectedCards.length-2:', selectedCards.length);
+      showAlert();
+      event.preventDefault();
+      setIsSubmitted(false);
+    } else {
+      const cardStr = selectedCards
+        .map(
+          (card, index) =>
+            `「${card.name}」` + (index < selectedCards.length - 1 ? '、' : ''),
+        )
+        .join('');
+      const message = `# 前提: あなたは8歳向けの物語を作成する小説家のプロとして振る舞ってください。
+    # 質問: ${cardStr} を使って簡単な物語を書いてください。
+    - 物語の内容は、8歳の男の子向けに、わかりやすい文章を作るよう心がけてください。`;
+      // setInput(cardStr);
 
-    // AIの実行を止める（これがAIを起動させている！）
-    append({ id: 'bbb', role: 'user', content: message });
+      // AIの実行を止める（これがAIを起動させている！）
+      append({ id: 'bbb', role: 'user', content: message });
 
-    // AIの実行を止める（→これ消してもAIうごく。というかこれは不要）
-    // handleSubmit(event);
+      // AIの実行を止める（→これ消してもAIうごく。というかこれは不要）
+      // handleSubmit(event);
 
-    console.log('formSubmit　　クリック：event：', event);
+      console.log('formSubmitクリック:event:', event);
 
-    event.preventDefault();
-    setIsSubmitted(true);
+      event.preventDefault();
+      setIsSubmitted(true);
+    }
   };
 
   const handleReturn = () => {
     setSelectedCards([]);
+    setMessages([]);
     setIsSubmitted(false);
   };
 
   return (
     <>
+      <AlertModalManager />
       {/* カードを選択する画面 */}
       {!isSubmitted && (
         <>
           <form onSubmit={formSubmit}>
-            <h2>好きなカードをクリックして、「送信」ボタンを押してね！</h2>
+            <h2>
+              好きなカードを{' '}
+              <a className="underline font-bold text-red-600">3つ </a>
+              クリックして、「送信」ボタンを押してね！
+            </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {shuffledItems.map((item, index) => (
                 <button
-                  type="button" // この行を追加
+                  type="button"
                   className={`rounded-xl p-2 shadow-sm ${
                     selectedCards.some((card) => card.index === index)
                       ? 'bg-red-500'
@@ -284,14 +306,8 @@ export default function CardWrapper() {
                 type="hidden"
                 name={`selectedCard_${index}`}
                 value={card.name}
-                // value={input}
               />
             ))}
-            {/* <input
-            // type="hidden"
-            value={input + 'cherry'}
-            onChange={handleInputChange}
-          /> */}
 
             {/* フッター要素 */}
             <div className="fixed bottom-0 left-0 right-0 bg-white p-4">
