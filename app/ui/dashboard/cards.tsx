@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useChat } from 'ai/react';
 import { showAlertModal } from '@/app/ui/dashboard/AlertModalManager';
 import { AlertModalManager } from '@/app/ui/dashboard/AlertModalManager';
+import { cardItem, CardItem } from '@/app/lib/cardItem';
 
 export default function CardWrapper() {
   // setMessages: 「メッセージ」の状態をローカルで更新します。
@@ -26,136 +27,6 @@ export default function CardWrapper() {
   } = useChat({
     api: `/api/chat`,
   });
-
-  type CardItem = {
-    name: string; // AIに指示するよう
-    title: string; // 画面表示用
-    image: string;
-  };
-
-  const cardItem: CardItem[] = [
-    { name: 'りんご', title: 'りんご', image: 'fruit_apple.png' },
-    {
-      name: 'ティラノサウルス',
-      title: 'ティラノサウルス',
-      image: 'Tyrannosaurus.png',
-    },
-    { name: 'イグアノドン', title: 'イグアノドン', image: 'Iguanodon.png' },
-    {
-      name: 'トリケラトプス',
-      title: 'トリケラトプス',
-      image: 'Triceratops.png',
-    },
-    {
-      name: 'エドモントサウルス',
-      title: 'エドモントサウルス',
-      image: 'dinosaur_edmontosaurus.png',
-    },
-    {
-      name: 'ブラキオサウルス',
-      title: 'ブラキオサウルス',
-      image: 'Brachiosaurus.png',
-    },
-    {
-      name: 'アパトサウルス',
-      title: 'アパトサウルス',
-      image: 'Apatosaurus.png',
-    },
-    {
-      name: 'アンキロサウルス',
-      title: 'アンキロサウルス',
-      image: 'dinosaur_ankylosaurus.png',
-    },
-    {
-      name: 'ヴェロキラプトル',
-      title: 'ヴェロキラプトル',
-      image: 'Velociraptor.png',
-    },
-    {
-      name: 'パキケファロサウルス',
-      title: 'パキケファロサウルス',
-      image: 'dinosaur_pachycephalosaurus.png',
-    },
-    {
-      name: 'パラサウロロフス',
-      title: 'パラサウロロフス',
-      image: 'dinosaur_parasaurolophus.png',
-    },
-    { name: 'デイノニクス', title: 'デイノニクス', image: 'Deinonychus.png' },
-    { name: 'プテラノドン', title: 'プテラノドン', image: 'Pteranodon.png' },
-    {
-      name: 'スピノサウルス',
-      title: 'スピノサウルス',
-      image: 'spinosaurus.png',
-    },
-    {
-      name: 'ケラトサウルス',
-      title: 'ケラトサウルス',
-      image: 'dinosaur_ceratosaurus.png',
-    },
-    { name: '滑り台', title: 'すべりだい', image: 'suberidai.png' },
-    {
-      name: '公園の水飲み場',
-      title: '公園の水飲み場',
-      image: 'kouen_mizunomiba.png',
-    },
-    { name: '公園', title: '公園', image: 'tatemono_kouen.png' },
-    { name: 'えんぴつ', title: 'えんぴつ', image: 'pen_enpitsu_mark.png' },
-    { name: 'ノート', title: 'ノート', image: 'book_note_empty.png' },
-    {
-      name: 'スパゲッティ',
-      title: 'スパゲッティ',
-      image: 'food_spaghetti_bolognese_meatsauce.png',
-    },
-    {
-      name: 'ナポリタン',
-      title: 'ナポリタン',
-      image: 'food_spaghetti_neapolitan.png',
-    },
-    {
-      name: 'カレーライス',
-      title: 'カレーライス',
-      image: 'food_curry_dorodoro.png',
-    },
-    { name: '食パン', title: '食パン', image: 'bread_syokupan.png' },
-    {
-      name: 'ピザトースト',
-      title: 'ピザトースト',
-      image: 'pan_pizza_toast.png',
-    },
-    {
-      name: 'うんどうかい',
-      title: 'うんどうかい',
-      image: 'school_undoukai.png',
-    },
-    { name: '犬', title: '犬', image: 'dog_akitainu.png' },
-    { name: '猫', title: '猫', image: 'cat11_moyou_sabatora_moyou_white.png' },
-    { name: '算数', title: 'さんすう', image: 'textbook_h_sansu.png' },
-    { name: '国語', title: 'こくご', image: 'textbook_h_kokugo.png' },
-    { name: '理科', title: 'りか', image: 'textbook_h_rika.png' },
-    { name: '社会', title: 'しゃかい', image: 'textbook_h_syakai.png' },
-    { name: '海', title: '海', image: 'umi_beach.png' },
-    { name: 'うきわ', title: 'うきわ', image: 'ukiwa.png' },
-    { name: 'プール', title: 'プール', image: 'suiei_seoyogi.png' },
-    { name: '木', title: '木', image: 'tree_yellowgreen.png' },
-    {
-      name: '料理',
-      title: '料理',
-      image: 'cooking_chef_man_asia.png',
-    },
-    {
-      name: 'パティシエ',
-      title: 'パティシエ',
-      image: 'kid_job_boy_patissier.png',
-    },
-    { name: 'シェフ', title: 'シェフ', image: 'kid_job_boy_chef.png' },
-    { name: '給食', title: '給食', image: 'kyusyoku_boy_mask.png' },
-    {
-      name: 'ザトウクジラ',
-      title: 'ザトウクジラ',
-      image: 'whale_06_zatoukujira.png',
-    },
-  ];
 
   // シャッフルしたカードを設定するための状態管理を設定
   const [shuffledItems, setShuffledItems] = useState([
@@ -231,7 +102,9 @@ export default function CardWrapper() {
         .join('');
       const message = `# 前提: あなたは8歳向けの物語を作成する小説家のプロとして振る舞ってください。
     # 質問: ${cardStr} を使って簡単な物語を書いてください。
-    - 物語の内容は、8歳の男の子向けに、わかりやすい文章を作るよう心がけてください。`;
+    - 物語の内容は、8歳の男の子向けに、わかりやすい文章を作るよう心がけてください。
+    - 文字数は800字以内にしてください。
+    - できるだけ簡潔な文章を書くようにしてください。`;
       // setInput(cardStr);
 
       // AIの実行を止める（これがAIを起動させている！）
