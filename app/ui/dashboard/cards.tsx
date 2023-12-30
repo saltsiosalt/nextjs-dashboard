@@ -68,7 +68,6 @@ export default function CardWrapper() {
         return [...prevSelectedCards, { index, name }];
       }
     });
-    // setIsSubmitted(false); // 送信状態をリセット
   };
 
   // 全てのカードの選択をクリアする
@@ -81,15 +80,14 @@ export default function CardWrapper() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const formSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     console.log('selectedCards.length-1:', selectedCards.length);
+    // カードの枚数チェックし、3枚でなければアラートを出す
     const showAlert = () => {
-      console.log('showAlert');
       showAlertModal({
         title: 'カードの選択がまちがってます！',
         message: 'カードは３つえらんでね',
       });
     };
     if (selectedCards.length !== 3) {
-      console.log('selectedCards.length-2:', selectedCards.length);
       showAlert();
       event.preventDefault();
       setIsSubmitted(false);
@@ -104,7 +102,8 @@ export default function CardWrapper() {
     # 質問: ${cardStr} を使って簡単な物語を書いてください。
     - 物語の内容は、8歳の男の子向けに、わかりやすい文章を作るよう心がけてください。
     - 文字数は800字以内にしてください。
-    - できるだけ簡潔な文章を書くようにしてください。`;
+    - 物語は「起承転結」（英語でdramatic structure）になるようにしてください。
+    - 8歳の男の子が声に出して読めるように、できるだけ簡潔な文章を書くようにしてください。`;
       // setInput(cardStr);
 
       // AIの実行を止める（これがAIを起動させている！）
@@ -123,6 +122,9 @@ export default function CardWrapper() {
   const handleReturn = () => {
     setSelectedCards([]);
     setMessages([]);
+    // カードをシャッフルし直す
+    setShuffledItems([]);
+    setShuffledItems(shuffleArray(cardItem));
     setIsSubmitted(false);
   };
 
