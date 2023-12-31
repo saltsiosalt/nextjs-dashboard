@@ -24,6 +24,8 @@ export default function CardWrapper() {
     handleSubmit,
     setInput,
     setMessages,
+    isLoading,
+    stop,
   } = useChat({
     api: `/api/chat`,
   });
@@ -79,6 +81,7 @@ export default function CardWrapper() {
   // 「送信」ボタンを追加し、そのボタンがクリックされたときの処理
   const [isSubmitted, setIsSubmitted] = useState(false);
   const formSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setMessages([]);
     console.log('selectedCards.length-1:', selectedCards.length);
     // カードの枚数チェックし、3枚でなければアラートを出す
     const showAlert = () => {
@@ -98,11 +101,12 @@ export default function CardWrapper() {
             `「${card.name}」` + (index < selectedCards.length - 1 ? '、' : ''),
         )
         .join('');
-      const message = `# 前提: あなたは8歳向けの物語を作成する小説家のプロとして振る舞ってください。
+      const message = `# 前提: あなたは8歳向けの物語を作成する児童文学小説作家のプロとして振る舞ってください。
     # 質問: ${cardStr} を使って簡単な物語を書いてください。
     - 物語の内容は、8歳の男の子向けに、わかりやすい文章を作るよう心がけてください。
-    - 文字数は800字以内にしてください。
+    - 文字数は700字以内にしてください。
     - 物語は「起承転結」（英語でdramatic structure）になるようにしてください。
+    - 物語に登場する人の名前は日本人の名前にしてください。
     - 8歳の男の子が声に出して読めるように、できるだけ簡潔な文章を書くようにしてください。`;
       // setInput(cardStr);
 
@@ -120,6 +124,9 @@ export default function CardWrapper() {
   };
 
   const handleReturn = () => {
+    if (isLoading) {
+      stop();
+    }
     setSelectedCards([]);
     setMessages([]);
     // カードをシャッフルし直す

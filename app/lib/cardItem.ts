@@ -38,6 +38,11 @@ export const cardItem: CardItem[] = [
     image: 'dinosaur_ankylosaurus.png',
   },
   {
+    name: 'ステゴサウルス',
+    title: 'ステゴサウルス',
+    image: 'Stegosaurus.png',
+  },
+  {
     name: 'ヴェロキラプトル',
     title: 'ヴェロキラプトル',
     image: 'Velociraptor.png',
@@ -63,6 +68,54 @@ export const cardItem: CardItem[] = [
     name: 'ケラトサウルス',
     title: 'ケラトサウルス',
     image: 'dinosaur_ceratosaurus.png',
+  },
+
+  {
+    name: 'プロトケラトプス',
+    title: 'プロトケラトプス',
+    image: 'dinosaur_protoceratops.png',
+  },
+  {
+    name: 'フクイベナートル・パラドクサス',
+    title: 'フクイベナートル・パラドクサス',
+    image: 'dinosaur_fukuivenator_paradoxus.png',
+  },
+  {
+    name: 'カルノタウルス',
+    title: 'カルノタウルス',
+    image: 'dinosaur_carnotaurus.png',
+  },
+  {
+    name: 'ナヌークサウルス',
+    title: 'ナヌークサウルス',
+    image: 'dinosaur_nanuqsaurus.png',
+  },
+  {
+    name: 'ミクロラプトル',
+    title: 'ミクロラプトル',
+    image: 'kodai_microraptor.png',
+  },
+  {
+    name: 'テリジノサウルス',
+    title: 'テリジノサウルス',
+    image: 'dinosaur_therizinosaurus.png',
+  },
+  { name: 'トロオドン', title: 'トロオドン', image: 'kyouryuu_troodon.png' },
+  {
+    name: 'アロサウルス',
+    title: 'アロサウルス',
+    image: 'dinosaur_allosaurus.png',
+  },
+  { name: 'ナナフシ', title: 'ナナフシ', image: 'bug_nanafushi.png' },
+  {
+    name: 'ミズカマキリ',
+    title: 'ミズカマキリ',
+    image: 'bug_mizu_kamakiri.png',
+  },
+  {
+    name: 'カブトムシ',
+    title: 'カブトムシ',
+    image: 'bug_kabutomushi_osu_black.png',
   },
   { name: '滑り台', title: 'すべりだい', image: 'suberidai.png' },
   {
