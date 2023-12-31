@@ -210,4 +210,15 @@ export const cardItem: CardItem[] = [
     title: 'ザトウクジラ',
     image: 'whale_06_zatoukujira.png',
   },
+
+  {
+    name: 'フクイラプトル・キタダニエンシス',
+    title: 'フクイラプトル・キタダニエンシス',
+    image: 'fukuiraptor-01.jpg',
+  },
+  {
+    name: '恐竜の化石',
+    title: '恐竜の化石',
+    image: 'trex_kokkaku.png',
+  },
 ];
