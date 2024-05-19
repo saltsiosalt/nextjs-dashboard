@@ -75,11 +75,11 @@ export const cardItem: CardItem[] = [
     title: 'プロトケラトプス',
     image: 'dinosaur_protoceratops.png',
   },
-  {
-    name: 'フクイベナートル・パラドクサス',
-    title: 'フクイベナートル・パラドクサス',
-    image: 'dinosaur_fukuivenator_paradoxus.png',
-  },
+  // {
+  //   name: 'フクイベナートル・パラドクサス',
+  //   title: 'フクイベナートル・パラドクサス',
+  //   image: 'dinosaur_fukuivenator_paradoxus.png',
+  // },
   {
     name: 'カルノタウルス',
     title: 'カルノタウルス',

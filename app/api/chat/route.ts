@@ -17,7 +17,8 @@ export async function POST(req: Request) {
   // プロンプトに基づいて OpenAI API に応答をリクエストします
   const response = await openai.chat.completions.create({
     // model: 'gpt-3.5-turbo',
-    model: 'gpt-4',
+    // model: 'gpt-4',
+    model: 'gpt-4o',
     stream: true,
     messages: messages,
   });

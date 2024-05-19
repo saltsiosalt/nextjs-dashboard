@@ -6,8 +6,11 @@ import { useChat } from 'ai/react';
 import { showAlertModal } from '@/app/ui/dashboard/AlertModalManager';
 import { AlertModalManager } from '@/app/ui/dashboard/AlertModalManager';
 import { cardItem, CardItem } from '@/app/lib/cardItem';
+import { CardSkeleton } from '@/app/ui/skeletons';
 
 export default function CardWrapper() {
+  const [finish, setFinish] = useState<boolean>(false);
+
   // setMessages: 「メッセージ」の状態をローカルで更新します。
   //     これは、クライアント上でメッセージを編集し、手動で「reload」メソッドをトリガーして AI 応答を再生成する場合に便利です。
   // reload: 指定されたチャット履歴の最後の AI チャット応答を再読み込みします。
@@ -28,6 +31,7 @@ export default function CardWrapper() {
     stop,
   } = useChat({
     api: `/api/chat`,
+    onFinish: () => setFinish(true),
   });
 
   // シャッフルしたカードを設定するための状態管理を設定
@@ -104,8 +108,8 @@ export default function CardWrapper() {
       const message = `# 前提: あなたは8歳向けの物語を作成する児童文学小説作家のプロとして振る舞ってください。
     # 質問: ${cardStr} を使って簡単な物語を書いてください。
     - 物語の内容は、8歳の男の子向けに、わかりやすい文章を作るよう心がけてください。
-    - 文字数は700字以内にしてください。
-    - 物語は「起承転結」（英語でdramatic structure）になるようにしてください。
+    - 文字数は500字以内にしてください。
+    - 物語は「起承転結」（英語でdramatic structure）になるようにしてください。(しかし、文章中に"起" ,"承"と表示しないでください。 )
     - 物語に登場する人の名前は日本人の名前にしてください。
     - 8歳の男の子が声に出して読めるように、できるだけ簡潔な文章を書くようにしてください。`;
       // setInput(cardStr);
@@ -135,6 +139,15 @@ export default function CardWrapper() {
     setIsSubmitted(false);
   };
 
+  // 音声読み上げ
+  const readStory = () => {
+    messages.map((m, index) => {
+      const text = m.role === 'user' ? '' : m.content;
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utterance);
+    });
+  };
+
   return (
     <>
       <AlertModalManager />
@@ -148,39 +161,41 @@ export default function CardWrapper() {
               クリックして、「送信」ボタンを押してね！
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {shuffledItems.map((item, index) => (
-                <button
-                  type="button"
-                  className={`rounded-xl p-2 shadow-sm ${
-                    selectedCards.some((card) => card.index === index)
-                      ? 'bg-red-500'
-                      : 'bg-gray-50'
-                  }`}
-                  key={index}
-                  onClick={() => handleCardClick(index, item.name)}
-                >
-                  <div
-                    className={`${notoSansJp.className} truncate rounded-xl bg-white px-3 py-6 text-center text-2xl`}
+              {!shuffledItems[0].title && <CardSkeleton />}
+              {shuffledItems[0].title &&
+                shuffledItems.map((item, index) => (
+                  <button
+                    type="button"
+                    className={`rounded-xl p-2 shadow-sm ${
+                      selectedCards.some((card) => card.index === index)
+                        ? 'bg-red-500'
+                        : 'bg-gray-50'
+                    }`}
+                    key={index}
+                    onClick={() => handleCardClick(index, item.name)}
                   >
-                    <h3
-                      className={`${notoSansJp.className} text-sm font-medium `}
+                    <div
+                      className={`${notoSansJp.className} truncate rounded-xl bg-white px-3 py-6 text-center text-2xl`}
                     >
-                      {item.title}
-                    </h3>
-                    <Image
-                      src={`/image/${item.image}`}
-                      width={200}
-                      height={200}
-                      sizes="80vw"
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                      }}
-                      alt="fruit apple"
-                    />
-                  </div>
-                </button>
-              ))}
+                      <h3
+                        className={`${notoSansJp.className} text-sm font-medium `}
+                      >
+                        {item.title}
+                      </h3>
+                      <Image
+                        src={`/image/${item.image}`}
+                        width={200}
+                        height={200}
+                        sizes="80vw"
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                        }}
+                        alt={item.title}
+                      />
+                    </div>
+                  </button>
+                ))}
             </div>
             {selectedCards.map((card, index) => (
               <input
@@ -231,6 +246,15 @@ export default function CardWrapper() {
               </li>
             ))}
           </ul>
+          {finish && (
+            <button
+              onClick={readStory}
+              className="mt-4 mr-2 rounded bg-blue-500 px-4 py-2 text-white"
+            >
+              よみあげる
+            </button>
+          )}
+
           <button
             onClick={handleReturn}
             className="mt-4 rounded bg-blue-500 px-4 py-2 text-white"
